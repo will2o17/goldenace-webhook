@@ -11,13 +11,18 @@ CHAT_ID = os.getenv("CHAT_ID")
 def webhook():
     data = request.get_data(as_text=True)
 
+    # 🔍 LOG what TradingView actually sent
+    print("INCOMING_FROM_TV:", repr(data))
+
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
         "text": data
     }
 
-    requests.post(url, json=payload)
+    # Send to Telegram & log Telegram’s response
+    r = requests.post(url, json=payload)
+    print("TELEGRAM_RESPONSE:", r.status_code, r.text)
 
     return "OK", 200
 
@@ -27,4 +32,3 @@ def home():
 
 if __name__ == "__main__":
     app.run()
-
